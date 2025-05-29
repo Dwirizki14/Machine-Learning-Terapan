@@ -15,17 +15,16 @@ Referensi:
 
 ### Problem Statements
 1. Bagaimana memprediksi biaya asuransi kesehatan berdasarkan karakteristik pelanggan?  
-2. Algoritma machine learning mana yang memberikan prediksi biaya yang paling akurat?  
+2. Fitur apa saja yang paling memengaruhi besarnya biaya asuransi?
 
 ### Goals
-- Menghasilkan model prediksi biaya asuransi yang dapat meminimalkan kesalahan prediksi.  
-- Membandingkan performa tiga algoritma: K-Nearest Neighbor (KNN), Random Forest, dan Gradient Boosting.  
+- Membangun model prediktif untuk memperkirakan biaya asuransi pelanggan baru.  
+- Memberikan insight fitur penting yang menjadi pertimbangan dalam penetapan premi.
 
 ### Solution Statements
-- Melakukan preprocessing data dengan encoding fitur kategori dan standarisasi fitur numerik.  
-- Menggunakan PCA untuk reduksi dimensi dan pembagian dataset menjadi train dan test.  
-- Melatih dan menguji tiga model machine learning.  
-- Mengevaluasi performa model menggunakan metrik MAE, MSE, RMSE, dan R².
+- Membangun model baseline menggunakan Linear Regression.
+- Melakukan peningkatan model dengan menggunakan algoritma seperti Random Forest Regressor dan XGBoost.
+- Melakukan tuning hyperparameter dan evaluasi performa dengan metrik MAE, MSE, dan RMSE.
 
 ---
 
