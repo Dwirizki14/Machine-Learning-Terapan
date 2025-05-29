@@ -16,10 +16,12 @@ Referensi:
 ### Problem Statements
 1. Bagaimana memprediksi biaya asuransi kesehatan berdasarkan karakteristik pelanggan?  
 2. Fitur apa saja yang paling memengaruhi besarnya biaya asuransi?
+3. Bagaimana membangun model prediksi yang akurat dan dapat diandalkan untuk pelanggan baru?
 
 ### Goals
+- Membangun model prediktif yang mampu menghasilkan prediksi biaya asuransi yang akurat dan dapat dipercaya.
 - Membangun model prediktif untuk memperkirakan biaya asuransi pelanggan baru.  
-- Memberikan insight fitur penting yang menjadi pertimbangan dalam penetapan premi.
+- Menyediakan solusi machine learning yang optimal untuk diaplikasikan pada data pelanggan baru, sehingga memudahkan penetapan premi yang sesuai.
 
 ### Solution Statements
 - Membangun model baseline menggunakan Linear Regression.
