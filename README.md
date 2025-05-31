@@ -1,4 +1,4 @@
-# Machine-Learning-Terapan
+# Machine Learning Terapan
 
 # Laporan Proyek Machine Learning - Prediksi Biaya Asuransi Kesehatan
 
@@ -67,32 +67,44 @@ Dataset yang digunakan berasal dari Kaggle, berjudul **Medical Insurance Cost Da
 4. **Standarisasi fitur numerik**:  
    Fitur numerik (`age`, `bmi`, `children`) distandarisasi menggunakan `StandardScaler` agar memiliki mean 0 dan standar deviasi 1. Target variabel `charges` tidak distandarisasi.
 
+5. **Penanganan Outlier**:
+   Untuk menghindari pengaruh nilai ekstrem yang dapat merusak performa model, saya melakukan penanganan outlier menggunakan metode Interquartile Range (IQR). Fitur numerik diperiksa menggunakan kuartil 1 (Q1) dan kuartil 3 (Q3). Data di luar [Q1 - 1.5 * IQR, Q3 + 1.5 * IQR] dianggap outlier dan dihapus dari dataset, menghasilkan dataset baru data_clean.
+
 ### Alasan Data Preparation
 - Encoding diperlukan karena algoritma machine learning tidak dapat bekerja langsung dengan fitur kategorik.  
 - Standarisasi diperlukan agar fitur numerik memiliki skala yang seragam sehingga model tidak bias terhadap fitur tertentu.  
 - Pembagian data bertujuan untuk menguji kemampuan model pada data yang belum pernah dilihat sebelumnya, menghindari overfitting.
-
+- PCA hanya digunakan untuk eksplorasi tambahan dan tidak digunakan dalam pelatihan model akhir. Model dibangun dengan data hasil encoding dari data_clean yaitu data_encoded.
 ---
 
 ## 5. Modeling
 
 Tiga algoritma digunakan untuk memodelkan prediksi biaya asuransi:
 
-1. **K-Nearest Neighbor (KNN)**  
+1. **K-Nearest Neighbor (KNN)**
+   
+   KNN bekerja dengan mencari K tetangga terdekat dari data uji dan mengambil rata-rata target dari tetangga tersebut untuk regresi. saya menggunakan nilai default n_neighbors=5. 
    - Kelebihan: mudah dipahami, efektif untuk dataset kecil hingga menengah.  
    - Kekurangan: sensitif terhadap fitur yang tidak distandarisasi, lambat pada dataset besar.
 
-2. **Random Forest**  
+3. **Random Forest**
+   
+   Random Forest adalah ensemble dari banyak pohon keputusan (decision tree) yang dibangun secara acak dan hasil prediksi merupakan rata-rata dari semua pohon. Model ini tahan terhadap overfitting dan cocok untuk data non-linear. Parameter penting: n_estimators=100, random_state=42
    - Kelebihan: mengatasi overfitting dengan ensemble, baik untuk fitur campuran.  
    - Kekurangan: kurang interpretatif dibanding model linear.
 
-3. **Gradient Boosting**  
+5. **Gradient Boosting**
+   
+   Gradient Boosting membangun model secara bertahap dengan menyesuaikan kesalahan model sebelumnya. Ini membuat model sangat akurat namun lebih lambat dilatih. Parameter penting: n_estimators=100, learning_rate=0.1, random_state=42.
    - Kelebihan: akurasi tinggi, dapat melakukan tuning hyperparameter yang efektif.  
    - Kekurangan: waktu pelatihan lebih lama dibanding model lain.
 
 ---
 
 ## 6. Evaluation
+
+- Feature Importance:
+Untuk menjawab fitur mana yang paling memengaruhi biaya asuransi, saya menggunakan metode feature_importances_ dari Random Forest dan Gradient Boosting. Hasil menunjukkan bahwa age, bmi, dan smoker_yes adalah fitur dengan pengaruh terbesar terhadap biaya asuransi.
 
 ### Metrik Evaluasi yang Digunakan
 - **Mean Absolute Error (MAE)**: rata-rata absolut selisih antara prediksi dan nilai aktual, mengukur kesalahan prediksi secara langsung.  
@@ -110,24 +122,30 @@ Tiga algoritma digunakan untuk memodelkan prediksi biaya asuransi:
 
 Dari hasil tersebut, model Gradient Boosting memberikan performa terbaik dengan MAE dan RMSE terendah serta R² tertinggi, menandakan prediksi yang paling akurat dibandingkan model lainnya.
 
+### Hasil Prediksi Model
+
+Berikut adalah hasil prediksi dari tiga model (KNN, Random Forest, dan Gradient Boosting) untuk lima data sampel:
+
+| Index | y_true (Biaya Aktual) | Prediksi KNN     | Prediksi Random Forest | Prediksi Gradient Boosting |
+|-------|------------------------|------------------|-------------------------|-----------------------------|
+| 660   | 6435.62                | 5875.43          | 8471.37                 | 6173.53                     |
+| 754   | 17128.43               | 8873.41          | 5743.82                 | 5920.88                     |
+| 487   | 1253.94                | 1597.16          | 1441.00                 | 2042.17                     |
+| 429   | 18804.75               | 8880.85          | 7605.73                 | 7965.80                     |
+| 559   | 1646.43                | 1832.26          | 2034.42                 | 3287.62                     |
+
+###  Analisis 
+
+- **KNN**
+
+  cenderung memberikan nilai prediksi yang dekat terhadap nilai aktual untuk data dengan nilai y_true yang rendah (contoh: index 487 dan 559), tapi gagal memprediksi data dengan nilai besar (contoh: index 754 dan 429).
+  
+- **Random Forest**
+  
+  cenderung underrate (terlalu rendah) untuk nilai besar, dan performanya tidak jauh berbeda dari KNN dalam kasus ini.
+  
+- **Gradient Boosting**
+
+  memberikan prediksi yang lebih tinggi, namun mendekati target aktual terutama untuk data dengan biaya besar, seperti index 660 dan 429.
 ---
-
-## 7. Kesimpulan dan Rekomendasi
-
-- Dataset insurance cocok untuk proyek regresi dengan ukuran data yang memadai (1338 sampel).  
-- Proses data preparation penting untuk meningkatkan kualitas model, terutama encoding dan standarisasi.  
-- Gradient Boosting adalah algoritma terbaik untuk memprediksi biaya asuransi dengan akurasi lebih baik dibanding KNN dan Random Forest.  
-- Rekomendasi selanjutnya adalah melakukan hyperparameter tuning lebih lanjut pada Gradient Boosting dan mencoba model lain seperti XGBoost atau LightGBM untuk potensi peningkatan akurasi.
-
----
-
-## 8. Referensi
-
-- Mirichoi0218. "Medical Insurance Cost Dataset." Kaggle, 2018. [https://www.kaggle.com/datasets/mirichoi0218/insurance](https://www.kaggle.com/datasets/mirichoi0218/insurance)  
-- Pedregosa, F., et al. "Scikit-learn: Machine Learning in Python." Journal of Machine Learning Research, 2011.  
-- James, G., Witten, D., Hastie, T., & Tibshirani, R. "An Introduction to Statistical Learning." Springer, 2013.
-
----
-
-*Laporan ini disusun oleh [Nama Anda]*
 
