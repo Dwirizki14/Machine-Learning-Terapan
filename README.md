@@ -32,7 +32,7 @@ Referensi:
 
 ## 3. Data Understanding
 
-Dataset yang digunakan berasal dari Kaggle, berjudul **Medical Insurance Cost Dataset** yang berisi 1338 sampel data. Dataset memiliki 7 fitur, yaitu:
+Dataset yang digunakan berasal dari Kaggle, berjudul **Medical Insurance Cost Dataset** https://www.kaggle.com/datasets/mirichoi0218/insurance, yang berisi 1338 sampel data. Dataset memiliki 7 fitur, yaitu:
 
 | Fitur    | Tipe       | Deskripsi                                 |
 |----------|------------|-------------------------------------------|
@@ -55,20 +55,22 @@ Dataset yang digunakan berasal dari Kaggle, berjudul **Medical Insurance Cost Da
 ## 4. Data Preparation
 
 ### Tahapan Data Preparation
-1. **Encoding fitur kategori**:  
+
+1. **Penanganan Outlier**:
+   Untuk menghindari pengaruh nilai ekstrem yang dapat merusak performa model, saya melakukan penanganan outlier menggunakan metode Interquartile Range (IQR). Fitur numerik diperiksa menggunakan kuartil 1 (Q1) dan kuartil 3 (Q3). Data di luar [Q1 - 1.5 * IQR, Q3 + 1.5 * IQR] dianggap outlier dan dihapus dari dataset, menghasilkan dataset baru data_clean.
+   
+3. **Encoding fitur kategori**:  
    Fitur `sex`, `smoker`, dan `region` diubah menjadi variabel dummy (one-hot encoding) agar dapat digunakan dalam model machine learning.
 
-2. **Reduksi dimensi dengan PCA** (opsional):  
+4. **Reduksi dimensi dengan PCA**:  
    PCA diterapkan untuk mengurangi dimensi data sekaligus mempertahankan variansi terbesar.
 
-3. **Pembagian dataset**:  
+5. **Pembagian dataset**:  
    Dataset dibagi menjadi data latih (80%) dan data uji (20%) menggunakan `train_test_split` dengan `random_state=42` agar hasil konsisten.
 
-4. **Standarisasi fitur numerik**:  
+6. **Standarisasi fitur numerik**:  
    Fitur numerik (`age`, `bmi`, `children`) distandarisasi menggunakan `StandardScaler` agar memiliki mean 0 dan standar deviasi 1. Target variabel `charges` tidak distandarisasi.
 
-5. **Penanganan Outlier**:
-   Untuk menghindari pengaruh nilai ekstrem yang dapat merusak performa model, saya melakukan penanganan outlier menggunakan metode Interquartile Range (IQR). Fitur numerik diperiksa menggunakan kuartil 1 (Q1) dan kuartil 3 (Q3). Data di luar [Q1 - 1.5 * IQR, Q3 + 1.5 * IQR] dianggap outlier dan dihapus dari dataset, menghasilkan dataset baru data_clean.
 
 ### Alasan Data Preparation
 - Encoding diperlukan karena algoritma machine learning tidak dapat bekerja langsung dengan fitur kategorik.  
