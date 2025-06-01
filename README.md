@@ -57,6 +57,7 @@ Dataset yang digunakan berasal dari Kaggle, berjudul **Medical Insurance Cost Da
 ### Tahapan Data Preparation
 
 1. **Penanganan Outlier**:
+   
    Untuk menghindari pengaruh nilai ekstrem yang dapat merusak performa model, saya melakukan penanganan outlier menggunakan metode Interquartile Range (IQR). Fitur numerik diperiksa menggunakan kuartil 1 (Q1) dan kuartil 3 (Q3). Data di luar [Q1 - 1.5 * IQR, Q3 + 1.5 * IQR] dianggap outlier dan dihapus dari dataset, menghasilkan dataset baru data_clean.
    
 3. **Encoding fitur kategori**:  
