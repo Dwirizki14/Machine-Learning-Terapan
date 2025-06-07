@@ -39,7 +39,7 @@ Sistem ini penting untuk dikembangkan karena dapat:
 
 - **Dataset**: [Top 250 Korean Dramas – Kaggle](https://www.kaggle.com/datasets/ahbab911/top-250-korean-dramas-kdrama-dataset)
 
-Dataset berisi informasi lengkap dari 250 drama Korea teratas. Berikut adalah penjelasan masing-masing fitur:
+Dataset berisi 250 baris dan 17 fitur. Berikut adalah penjelasan masing-masing fitur:
 
 ###  Fitur dalam Dataset
 
@@ -111,19 +111,17 @@ Dataset berisi informasi lengkap dari 250 drama Korea teratas. Berikut adalah pe
 
 ##  3. Data Preparation
 
-1. **Menghapus kolom tidak relevan**: Kolom seperti 'Aired Date', 'Original Network', 'Aired On',
-   'Number of Episodes', 'Duration', 'Content Rating',
-   'Director', 'Screenwriter', 'Cast', 'Production companies', 'Rank' dihapus karena tidak digunakan dalam pemodelan.
-2. **Menghapus baris dengan Genre kosong**: Baris yang tidak memiliki informasi genre dihapus karena genre merupakan fitur utama untuk sistem rekomendasi.
-3. **Mengubah `Genre` menjadi list**: Genre yang awalnya dalam bentuk string (dipisahkan koma) dikonversi menjadi list agar bisa digunakan dalam proses encoding.
-4. **Encoding Genre**:
-   - Menggunakan `MultiLabelBinarizer` untuk membuat representasi biner dari genre (digunakan oleh model KNN).
-   - Menggunakan `TF-IDF Vectorizer` untuk menghasilkan matrix genre dalam bentuk vektor numerik (digunakan oleh model TF-IDF + Cosine Similarity).
+- Menghapus nilai kosong (missing value) di kolom Genre
+  Karena Kolom Genre adalah fitur utama dalam sistem rekomendasi ini, jika nilainya kosong, maka drama tersebut tidak bisa diolah atau direpresentasikan untuk keperluan modeling (seperti TF-IDF atau encoding).
+  
+- Membangun vektor genre dengan TF-IDF
+  TfidfVectorizer() adalah alat untuk mengubah teks genre menjadi vektor angka, fit_transform(df['Genre']) adalah langkah kunci dalam membangun representasi numerik dari data teks genre.
 
-##  4. Modeling
+Output ini nantinya digunakan untuk mengukur kemiripan antar drama, seperti dengan cosine similarity.
+
+##  4. Modeling & Results
 
 ### Metode 1: TF-IDF + Cosine Similarity
-- Membangun vektor genre dengan TF-IDF.
 - Menghitung kemiripan antar drama menggunakan `cosine_similarity`.
 
 Contoh Rekomendasi untuk "SKY Castle":
@@ -133,9 +131,11 @@ Contoh Rekomendasi untuk "SKY Castle":
 - The Penthouse 2
 - Hello Monster 
 
-### Metode 2: K-Nearest Neighbors (KNN)
-- Menggunakan hasil encoding genre dari `MultiLabelBinarizer`.
-- Membangun model KNN berdasarkan jarak antar genre.
+### Model 2: K-Nearest Neighbors (KNN)
+
+- Model KNN dilatih menggunakan **TF-IDF matrix** dari kolom Genre.
+- Model ini mencari K drama dengan vektor genre paling mirip (berdasarkan jarak cosine) terhadap drama input.
+ 
 
 Contoh Rekomendasi untuk "SKY Castle":
 - My Mister
