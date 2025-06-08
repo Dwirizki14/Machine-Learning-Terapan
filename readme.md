@@ -111,6 +111,8 @@ Dataset berisi 250 baris dan 17 fitur. Berikut adalah penjelasan masing-masing f
 
 ##  3. Data Preparation
 
+- Menghapus kolom-kolom tertentu
+  Karena hanya ke kolom-kolom yang benar-benar penting untuk sistem rekomendasi berbasis konten (content-based)
 - Menghapus nilai kosong (missing value) di kolom Genre
   Karena Kolom Genre adalah fitur utama dalam sistem rekomendasi ini, jika nilainya kosong, maka drama tersebut tidak bisa diolah atau direpresentasikan untuk keperluan modeling (seperti TF-IDF atau encoding).
   
